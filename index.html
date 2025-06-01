@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShortHub - Short Seller Intelligence Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 6rem 0;
+            background: radial-gradient(circle at center, rgba(255, 107, 107, 0.1) 0%, transparent 70%);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 4rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-section {
+            margin: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #feca57;
+        }
+
+        .card p {
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .report-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #ff6b6b;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .company-name {
+            font-weight: 600;
+            color: #feca57;
+        }
+
+        .report-date {
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        .short-firm {
+            color: #ff6b6b;
+            font-weight: 500;
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .ranking-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .rank-number {
+            background: #ff6b6b;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .firm-info {
+            flex-grow: 1;
+            margin-left: 1rem;
+        }
+
+        .success-rate {
+            color: #4ecdc4;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .search-bar {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
+            width: 100%;
+            max-width: 400px;
+            margin: 2rem auto;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .search-bar::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3rem 0;
+            margin-top: 6rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .alert {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 2rem 0;
+            color: #ffc107;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">ShortHub</div>
+            <ul class="nav-links">
+                <li><a href="#reports">Latest Reports</a></li>
+                <li><a href="#rankings">Rankings</a></li>
+                <li><a href="#targets">Top Targets</a></li>
+                <li><a href="#analytics">Analytics</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Short Seller Intelligence</h1>
+                <p>Comprehensive analysis of short selling activities, reports, and market insights</p>
+                <input type="text" class="search-bar" placeholder="Search companies, short sellers, or reports...">
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">247</div>
+                    <div>Active Short Reports</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">89</div>
+                    <div>Short Selling Firms</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1,423</div>
+                    <div>Companies Tracked</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">67%</div>
+                    <div>Average Success Rate</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="reports" class="content-section">
+            <div class="container">
+                <h2 class="section-title">Latest Short Reports</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Recent Publications</h3>
+                        <div class="report-item">
+                            <div class="report-header">
+                                <span class="company-name">TechCorp Inc. (TECH)</span>
+                                <span class="report-date">2 hours ago</span>
+                            </div>
+                            <div class="short-firm">Muddy Waters Research</div>
+                            <p>Allegations of revenue manipulation and accounting irregularities</p>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-header">
+                                <span class="company-name">GreenEnergy Co (GREN)</span>
+                                <span class="report-date">1 day ago</span>
+                            </div>
+                            <div class="short-firm">Citron Research</div>
+                            <p>Questioning sustainability claims and market projections</p>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-header">
+                                <span class="company-name">FinanceHub Ltd (FHUB)</span>
+                                <span class="report-date">3 days ago</span>
+                            </div>
+                            <div class="short-firm">Hindenburg Research</div>
+                            <p>Corporate governance concerns and regulatory violations</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Market Impact Analysis</h3>
+                        <p>Track how short reports affect stock prices and trading volumes in real-time.</p>
+                        <div class="alert">
+                            <strong>Alert:</strong> High volatility detected in recently targeted stocks
+                        </div>
+                        <button class="btn">View Full Analysis</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rankings" class="content-section">
+            <div class="container">
+                <h2 class="section-title">Short Seller Rankings</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Top Performing Firms</h3>
+                        <div class="ranking-item">
+                            <div class="rank-number">1</div>
+                            <div class="firm-info">
+                                <div><strong>Hindenburg Research</strong></div>
+                                <div>23 reports this year</div>
+                            </div>
+                            <div class="success-rate">78%</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="rank-number">2</div>
+                            <div class="firm-info">
+                                <div><strong>Muddy Waters</strong></div>
+                                <div>19 reports this year</div>
+                            </div>
+                            <div class="success-rate">74%</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="rank-number">3</div>
+                            <div class="firm-info">
+                                <div><strong>Citron Research</strong></div>
+                                <div>16 reports this year</div>
+                            </div>
+                            <div class="success-rate">71%</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="rank-number">4</div>
+                            <div class="firm-info">
+                                <div><strong>Spruce Point Capital</strong></div>
+                                <div>14 reports this year</div>
+                            </div>
+                            <div class="success-rate">69%</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Historical Performance</h3>
+                        <p>Comprehensive analysis of short seller track records over time, including success rates, average returns, and market impact.</p>
+                        <button class="btn">View Historical Data</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="targets" class="content-section">
+            <div class="container">
+                <h2 class="section-title">Most Targeted Companies</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Frequently Targeted Stocks</h3>
+                        <div class="ranking-item">
+                            <div class="company-name">SpeculativeTech Inc.</div>
+                            <div>7 reports (Last 12 months)</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="company-name">OvervaluedCorp</div>
+                            <div>5 reports (Last 12 months)</div>
+                        </div>
+                        <div class="ranking-item">
+                            <div class="company-name">QuestionableBooks Ltd</div>
+                            <div>4 reports (Last 12 months)</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Sector Analysis</h3>
+                        <p>Technology and healthcare sectors see the highest short seller activity, followed by renewable energy and SPACs.</p>
+                        <button class="btn">Detailed Sector Breakdown</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="analytics" class="content-section">
+            <div class="container">
+                <h2 class="section-title">Market Analytics</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Live Market Data</h3>
+                        <p>Real-time tracking of short interest, borrow rates, and market sentiment for targeted companies.</p>
+                        <button class="btn">Access Live Data</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Predictive Analysis</h3>
+                        <p>AI-powered insights to identify potential short targets based on financial metrics and market patterns.</p>
+                        <button class="btn">View Predictions</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>Risk Assessment</h3>
+                        <p>Comprehensive risk analysis for companies under short seller scrutiny, including regulatory and financial risks.</p>
+                        <button class="btn">Risk Dashboard</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 ShortHub. All rights reserved. | Financial data for informational purposes only.</p>
+            <p>This is a demo website. Please conduct your own research before making investment decisions.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple search functionality
+        document.querySelector('.search-bar').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            console.log('Searching for:', searchTerm);
+            // In a real application, this would filter results
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add some interactivity to buttons
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function() {
+                alert('This feature would connect to real financial data APIs in a production environment.');
+            });
+        });
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.style.transform = 'translateY(20px)';
+            card.style.opacity = '0';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
